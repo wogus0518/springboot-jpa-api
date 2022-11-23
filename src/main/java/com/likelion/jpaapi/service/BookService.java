@@ -5,6 +5,7 @@ import com.likelion.jpaapi.domain.Book;
 import com.likelion.jpaapi.domain.dto.BookResponse;
 import com.likelion.jpaapi.repository.AuthorRepository;
 import com.likelion.jpaapi.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,23 +15,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
 
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository) {
-        this.bookRepository = bookRepository;
-        this.authorRepository = authorRepository;
-    }
-
     public List<BookResponse> findBooks(Pageable pageable) {
         Page<Book> books = bookRepository.findAll(pageable);
-        List<BookResponse> bookResponses = books.stream()
-                .map(book -> {
-                    Optional<Author> optionalAuthor = authorRepository.findById(book.getAuthorId());
-                    return BookResponse.of(book, optionalAuthor.get().getName());
-                }).collect(Collectors.toList());
-        return bookResponses;
+        return books.stream()
+                .map(book -> BookResponse.of(book))
+                .collect(Collectors.toList());
     }
 }
