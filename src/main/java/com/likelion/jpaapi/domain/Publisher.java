@@ -1,4 +1,5 @@
 package com.likelion.jpaapi.domain;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,9 @@ import javax.persistence.Id;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Author {
+public class Publisher {
     @Id
     private Long id;
-    private String name;
+    public String name;
+    public String address;
 }
